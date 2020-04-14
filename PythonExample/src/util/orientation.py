@@ -1,5 +1,6 @@
 import math
 
+#this doesnt need to be fixed because it never gets run by itself and it functions anyway
 from util.vec import Vec3
 
 
