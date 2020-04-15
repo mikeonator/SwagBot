@@ -5,7 +5,7 @@ from routines import *
 
 #This file is for strategy
 
-class ExampleBot(GoslingAgent):
+class SwagBot(GoslingAgent):
     def run(agent):
         #An example of using raw utilities:
         relative_target = agent.ball.location - agent.me.location
