@@ -17,6 +17,7 @@ class SwagBot(GoslingAgent):
         if len(agent.stack) < 1:
             if agent.kickoff_flag:
                 agent.push(kickoff())
+                
             else:
                 agent.push(atba())
 
