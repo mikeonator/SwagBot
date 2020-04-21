@@ -19,19 +19,14 @@ class SwagBot(GoslingAgent):
                 agent.push(kickoff())  
             else:
                 close = ((agent.me.location - agent.ball.location).magnitude() > 2000)
-                need_boost = (agent.me.boost > 20)
-
-                large_boosts = [boost for boost in agent.boosts if boost.large and boost.active]
-                closest_fatboost = large_boosts[0]
-                closest_fat_distance = (large_boosts[0].location - agent.me.location).magnitude()
-
-                if (len(large_boosts) > 0):
-                    for item in large_boosts:
-                        item_distance = (item.location - agent.me.location).magnitude()
-                        if item_distance < closest_fat_distance:
-                            closest_fatboost = item
-                            closest_fat_distance = item_distance
-                    if need_boost:
+                need_boost = (agent.me.boost < 20)
+                if need_boost:
+                    large_boosts = [boost for boost in agent.boosts if boost.large and boost.active]
+                    if (len(large_boosts) > 0):
+                        closest_fatboost = large_boosts[0]
+                        for boost in boosts: 
+                                if(boost.location-agent.me.location).magnitude() < (closest_fatboost.location - agent.me.location).magnitude():
+                                    closest_fatboost = boost
                         agent.push(goto_boost(closest_fatboost))
                 else:
                     agent.push(atba())
