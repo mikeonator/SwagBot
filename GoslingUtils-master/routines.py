@@ -128,6 +128,34 @@ class flip():
             agent.pop()
             agent.push(recovery())
 
+class halfflip(): 
+    def __init__(self,vector,cancel = False):
+        self.vector = vector.normalize()
+        self.pitch = abs(self.vector[0])* -sign(self.vector[0])
+        self.yaw = abs(self.vector[1]) * sign(self.vector[1])
+        self.cancel = cancel
+        #the time the jump began
+        self.time = -1
+        #keeps track of the frames the jump button has been released
+        self.counter = 0
+    def run(self, agent):
+        if self.time == -1:
+            elapsed = 0
+            self.time = agent.time
+        else:
+            elapsed = agent.time - self.time
+        if elapsed < 0.15:
+            agent.controller.jump = True
+        elif elapsed >=0.15 and self.counter < 3:
+            agent.controller.jump = False
+            self.counter += 1   
+        elif elapsed < 0.3 or (not self.cancel and elapsed < 0.9):
+            agent.controller.jump = True
+            agent.controller.pitch = -self.pitch
+            agent.controller.yaw = self.yaw
+        elif elapsed < 0.45:
+            agent.push(recovery()) 
+            
 class goto():
     #Drives towards a designated (stationary) target
     #Optional vector controls where the car should be pointing upon reaching the target
