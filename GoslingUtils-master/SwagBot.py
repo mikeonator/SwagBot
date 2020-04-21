@@ -21,7 +21,7 @@ class SwagBot(GoslingAgent):
                 close = ((agent.me.location - agent.ball.location).magnitude() > 2000)
                 need_boost = (agent.me.boost > 20)
 
-                large_boosts = [boost for boost in agent.boosts if boost.large and boost.active()]
+                large_boosts = [boost for boost in agent.boosts if boost.large and boost.active]
                 closest_fatboost = large_boosts[0]
                 closest_fat_distance = (large_boosts[0].location - agent.me.location).magnitude()
 
