@@ -129,10 +129,8 @@ class flip():
             agent.push(recovery())
 
 class halfflip(): 
-    def __init__(self,vector,cancel = False):
-        self.vector = vector.normalize()
-        self.pitch = abs(self.vector[0])* -sign(self.vector[0])
-        self.yaw = abs(self.vector[1]) * sign(self.vector[1])
+    def __init__(self,pitch,cancel = False):
+        self.pitch = pitch
         self.cancel = cancel
         #the time the jump began
         self.time = -1
@@ -151,9 +149,9 @@ class halfflip():
             self.counter += 1   
         elif elapsed < 0.3 or (not self.cancel and elapsed < 0.9):
             agent.controller.jump = True
-            agent.controller.pitch = -self.pitch
-            agent.controller.yaw = self.yaw
+            agent.controller.pitch = self.pitch
         elif elapsed < 0.45:
+            agent.pop()
             agent.push(recovery()) 
             
 class goto():

@@ -7,18 +7,25 @@ from routines import *
 
 class SwagBot(GoslingAgent):
     def run(agent):
-        #An example of using raw utilities:
-        relative_target = agent.ball.location - agent.me.location
-        local_target = agent.me.local(relative_target)
-        defaultPD(agent, local_target)
-        defaultThrottle(agent, 2300)
-
+        agent.debug_stack()
         #An example of pushing routines to the stack:
+        counter = int()
         if len(agent.stack) < 1:
             if agent.kickoff_flag:
-                agent.push(kickoff())  
+                agent.push(kickoff())
+                counter = 0
             else:
-                close = ((agent.me.location - agent.ball.location).magnitude() > 2000)
+                defaultThrottle(agent, -2300)
+                counter += 1
+
+                if counter >= 60:
+                    agent.push(halfflip(1,True))
+                    counter = 0
+                
+                
+                
+
+                """ close = ((agent.me.location - agent.ball.location).magnitude() > 2000)
                 need_boost = (agent.me.boost < 20)
                 if need_boost:
                     large_boosts = [boost for boost in agent.boosts if boost.large and boost.active]
@@ -29,7 +36,7 @@ class SwagBot(GoslingAgent):
                                     closest_fatboost = boost
                         agent.push(goto_boost(closest_fatboost))
                 else:
-                    agent.push(atba())
+                    agent.push(atba()) """
                 
                     
         
