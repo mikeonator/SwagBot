@@ -13,19 +13,8 @@ class SwagBot(GoslingAgent):
         if len(agent.stack) < 1:
             if agent.kickoff_flag:
                 agent.push(kickoff())
-                counter = 0
             else:
-                defaultThrottle(agent, -2300)
-                counter += 1
-
-                if counter >= 60:
-                    agent.push(halfflip(1,True))
-                    counter = 0
-                
-                
-                
-
-                """ close = ((agent.me.location - agent.ball.location).magnitude() > 2000)
+                close = ((agent.me.location - agent.ball.location).magnitude() > 2000)
                 need_boost = (agent.me.boost < 20)
                 if need_boost:
                     large_boosts = [boost for boost in agent.boosts if boost.large and boost.active]
@@ -34,9 +23,14 @@ class SwagBot(GoslingAgent):
                         for boost in large_boosts: 
                                 if (boost.location - agent.me.location).magnitude() < (closest_fatboost.location - agent.me.location).magnitude():
                                     closest_fatboost = boost
-                        agent.push(goto_boost(closest_fatboost))
+                        agent.push(goto_boost(closest_fatboost))   
                 else:
-                    agent.push(atba()) """
+                    relative_target = agent.ball.location - agent.me.location
+                    local_target = agent.me.local(relative_target)
+                    defaultPD(agent, local_target)
+                    defaultThrottle(agent, 2300)
+                        
+                    
                 
                     
         
