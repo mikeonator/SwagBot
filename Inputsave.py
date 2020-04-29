@@ -11,7 +11,8 @@ def main():
     while 1:
         events = get_gamepad()
         for event in events:
-            if event.code == "BTN_NORTH":
+            if event.state != 0:
+                print("Button" + event.code)
                 print(event.state)
 
 
