@@ -1,15 +1,73 @@
 from tools import  *
 from objects import *
 from routines import *
-
+from inputs import get_gamepad
+import os
+import ast
 
 #This file is for strategy
 
 class SwagBot(GoslingAgent):
     def run(agent):
+        agent.inputsave = {"AButton":[], "BButton":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}
+        indict = open(os.getcwd() + "/SavedOutput.txt","r")
+        agent.inputsave = ast.literal_eval(indict.read())
+        print(str(agent.inputsave))
+
         agent.debug_stack()
         #An example of pushing routines to the stack:
-        
+
+        events = get_gamepad()
+        agent.inputsave["Time"].append(agent.time)
+        for event in events:
+            if event.code == "BTN_EAST":
+                agent.inputsave["BButton"].append(event.state)
+            else:
+                agent.inputsave["BButton"].append(0)
+            if event.code == "BTN_SOUTH":
+                agent.inputsave["AButton"].append(event.state)
+            else:
+                agent.inputsave["AButton"].append(0)
+            if event.code == "ButtonABS_Z":
+                savestate = int(event.state)
+                outstate = (savestate)/255
+                agent.inputsave["LeftTrig"].append(outstate)
+            else:
+                agent.inputsave["LeftTrig"].append(0)
+            if event.code == "ButtonABS_RZ":
+                savestate = int(event.state)
+                outstate = (savestate)/255
+                agent.inputsave["RightTrig"].append(outstate)
+            else:
+                agent.inputsave["RightTrig"].append(0)
+            if event.code == "ButtonABS_X":
+                savestate = int(event.state)
+                outstate = float()
+                if savestate > 0:
+                    outstate = (savestate)/32767
+                else:
+                    outstate = (savestate)/32768
+                agent.inputsave["Yaw"].append(outstate)
+            else:
+                agent.inputsave["Yaw"].append(0)
+            if event.code == "ButtonABS_Y":
+                savestate = int(event.state)
+                outstate = float()
+                if savestate > 0:
+                    outstate = (savestate)/32767
+                else:
+                    outstate = (savestate)/32768
+                agent.inputsave["Pitch"].append(outstate)
+            else:
+                agent.inputsave["Pitch"].append(0)
+        print(str(agent.inputsave))
+        outF = open(os.getcwd() + "/SavedOutput.txt", "w")
+        outF.write(str(agent.inputsave))
+        outF.close()
+
+
+            
+
         if len(agent.stack) < 1:
             if agent.kickoff_flag:
                 agent.push(kickoff())
