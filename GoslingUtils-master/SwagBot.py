@@ -8,6 +8,11 @@ import ast
 #This file is for strategy
 
 class SwagBot(GoslingAgent):
+    def __init__(agent):
+        if ((open(os.getcwd() + "/SavedOutput.txt","r").read()) != '{"AButton":[], "BButton":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}'):
+            open(os.getcwd() + "/SavedOutput.txt", "w").write('{"AButton":[], "BButton":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}').close()
+
+
     def run(agent):
         agent.inputsave = {"AButton":[], "BButton":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}
         indict = open(os.getcwd() + "/SavedOutput.txt","r")
