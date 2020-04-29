@@ -8,43 +8,39 @@ import ast
 #This file is for strategy
 
 class SwagBot(GoslingAgent):
-    def __init__(agent):
-        if ((open(os.getcwd() + "/SavedOutput.txt","r").read()) != '{"AButton":[], "BButton":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}'):
-            open(os.getcwd() + "/SavedOutput.txt", "w").write('{"AButton":[], "BButton":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}').close()
-
-
     def run(agent):
+        events = get_gamepad()
+        if (agent.game.time_remaining == 299.9583435058594):
+            boi = open(os.getcwd() + "/SavedOutput.txt", "w")
+            boi.write('{"AButton":[0], "BButton":[0], "RightTrig":[0], "LeftTrig":[0], "Yaw":[0], "Pitch":[0], "Time":[' + str(agent.time) + ']}')
+            print("boi")
+            boi.close()
         agent.inputsave = {"AButton":[], "BButton":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}
         indict = open(os.getcwd() + "/SavedOutput.txt","r")
         agent.inputsave = ast.literal_eval(indict.read())
-        print(str(agent.inputsave))
 
         agent.debug_stack()
         #An example of pushing routines to the stack:
 
-        events = get_gamepad()
-        agent.inputsave["Time"].append(agent.time)
+        count = 0
+        
         for event in events:
             if event.code == "BTN_EAST":
                 agent.inputsave["BButton"].append(event.state)
-            else:
-                agent.inputsave["BButton"].append(0)
+                count += 1
             if event.code == "BTN_SOUTH":
                 agent.inputsave["AButton"].append(event.state)
-            else:
-                agent.inputsave["AButton"].append(0)
+                count += 1
             if event.code == "ButtonABS_Z":
                 savestate = int(event.state)
                 outstate = (savestate)/255
                 agent.inputsave["LeftTrig"].append(outstate)
-            else:
-                agent.inputsave["LeftTrig"].append(0)
+                count += 1
             if event.code == "ButtonABS_RZ":
                 savestate = int(event.state)
                 outstate = (savestate)/255
                 agent.inputsave["RightTrig"].append(outstate)
-            else:
-                agent.inputsave["RightTrig"].append(0)
+                count += 1
             if event.code == "ButtonABS_X":
                 savestate = int(event.state)
                 outstate = float()
@@ -53,8 +49,7 @@ class SwagBot(GoslingAgent):
                 else:
                     outstate = (savestate)/32768
                 agent.inputsave["Yaw"].append(outstate)
-            else:
-                agent.inputsave["Yaw"].append(0)
+                count += 1
             if event.code == "ButtonABS_Y":
                 savestate = int(event.state)
                 outstate = float()
@@ -63,9 +58,9 @@ class SwagBot(GoslingAgent):
                 else:
                     outstate = (savestate)/32768
                 agent.inputsave["Pitch"].append(outstate)
-            else:
-                agent.inputsave["Pitch"].append(0)
-        print(str(agent.inputsave))
+                count += 1
+        if count != 0:
+            agent.inputsave["Time"].append((agent.time - agent.inputsave['Time'][0]))
         outF = open(os.getcwd() + "/SavedOutput.txt", "w")
         outF.write(str(agent.inputsave))
         outF.close()
