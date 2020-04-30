@@ -26,7 +26,7 @@ def main():
 
     plt.table(cellText=outlist,colLabels=keylist,rowLabels=timelist)
     plt.axis('off')
-    plt.savefig("./Bruh.pdf", bbox_inches='tight',dpi=1200,loc='top left')
+    plt.savefig("./Bruh.pdf", bbox_inches='tight',dpi=1200,loc='center')
     plt.close()
 
 
