@@ -13,9 +13,9 @@ class SwagBot(GoslingAgent):
             events = get_gamepad()
             if (agent.game.time_remaining == 299.9583435058594):
                 boi = open(os.getcwd() + "/SavedOutput.txt", "w")
-                boi.write('{"AButton":[0], "BButton":[0], "RightTrig":[0], "LeftTrig":[0], "Yaw":[0], "Pitch":[0], "Time":[' + str(agent.time) + ']}')
+                boi.write('{"AButton":[0], "BButton":[0], "RightBump":[0], "RightTrig":[0], "LeftTrig":[0], "Yaw":[0], "Pitch":[0], "Time":[' + str(agent.time) + ']}')
                 boi.close()
-            agent.inputsave = {"AButton":[], "BButton":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}
+            agent.inputsave = {"AButton":[], "BButton":[], "RightBump":[], "RightTrig":[], "LeftTrig":[], "Yaw":[], "Pitch":[], "Time":[]}
             indict = open(os.getcwd() + "/SavedOutput.txt","r")
             agent.inputsave = ast.literal_eval(indict.read())
             count = 0
@@ -25,6 +25,9 @@ class SwagBot(GoslingAgent):
                     count += 1
                 if event.code == "BTN_SOUTH":
                     agent.inputsave["AButton"].append(event.state)
+                    count += 1
+                if event.code == "ButtonBTN_TR":
+                    agent.inputsave["RightBump"].append(event.state)
                     count += 1
                 if event.code == "ButtonABS_Z":
                     savestate = int(event.state)
