@@ -8,7 +8,8 @@ class SwagBot(GoslingAgent):
     def run(agent):
         agent.debug_stack()
         #An example of pushing routines to the stack:
-        if len(agent.stack) < 1:
+
+        if False:#len(agent.stack) < 1:
             if agent.kickoff_flag:
                 agent.push(kickoff())
             else:
@@ -32,13 +33,32 @@ class SwagBot(GoslingAgent):
                                     closest_fatboost = boost
                         agent.push(goto_boost(closest_fatboost))   
                 elif(not(agent.kickoff_flag)):
-                    targets = {"goal":(opponent_left_post,opponent_right_post), "anywhere_but_my_net":(my_right_post,my_left_post)}
+                    targets = {"goal":(agent.foe_goal.left_post,agent.foe_goal.right_post), "anywhere_but_my_net":(agent.friend_goal.right_post,agent.friend_goal.left_post)}
                     hits = find_hits(agent,targets)
-                    print(hits)
-                    relative_target = agent.ball.location - agent.me.location
-                    local_target = agent.me.local(relative_target)
-                    defaultPD(agent, local_target)
-                    defaultThrottle(agent, 2300)
+                    
+                    #ball_to_friend_left = (agent.ball.location - agent.friend_goal.left_post).normalize()
+                    #ball_to_friend_right = (agent.ball.location - agent.friend_goal.right_post).normalize()
+                    ball_to_friend = (agent.friend_goal.location - agent.ball.location).normalize()
+                    ball_towards_friend_goal = ball_to_friend.dot(agent.ball.velocity)
+                    
+                    
+
+
+                    #print(ball_to_friend_left)
+                    #print(agent.ball.velocity)
+                    #print("_"*7)
+                    #ball_going_in_my_goal =
+
+                    
+                    #if len(hits["goal"]) > 0:
+                        #agent.push(hits["goal"][0])
+                    #elif len(hits["anywhere_but_my_net"]) > 0:
+                        #agent.push(hits["anywhere_but_my_net"][0])
+
+                    #relative_target = agent.ball.location - agent.me.location
+                    #local_target = agent.me.local(relative_target)
+                    #defaultPD(agent, local_target)
+                    #defaultThrottle(agent, 2300)
                         
                     
                 
