@@ -38,8 +38,8 @@ class SwagBot(GoslingAgent):
                     targets = {"goal":(agent.foe_goal.left_post,agent.foe_goal.right_post), "anywhere_but_my_net":(agent.friend_goal.right_post,agent.friend_goal.left_post)}
                     hits = find_hits(agent,targets)
                     
-                    #ball_to_friend_left = (agent.ball.location - agent.friend_goal.left_post).normalize()
-                    #ball_to_friend_right = (agent.ball.location - agent.friend_goal.right_post).normalize()
+                    ball_to_friend_left = (agent.ball.location - agent.friend_goal.left_post).normalize()
+                    ball_to_friend_right = (agent.ball.location - agent.friend_goal.right_post).normalize()
 
                     ball_to_friend = (agent.friend_goal.location - agent.ball.location).normalize()
                     ball_to_friend_distance = (agent.friend_goal.location - agent.ball.location).magnitude()
