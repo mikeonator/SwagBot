@@ -59,7 +59,23 @@ class SwagBot(GoslingAgent):
                      else ball_travels_towards_me < 0 and agent.ball.velocity <= 2240 and ball_behind_me > 0: 
                         agent.push(hits["goal"][0])
 
-                    
+                    agent.line(agent.ball.location, agent.friend_goal.left_post)
+                    agent.line(agent.ball.location, agent.friend_goal.right_post)
+                    agent.line(agent.ball.location, (agent.ball.location + agent.ball.velocity))
+
+                    friendleftpostmag = (((ball_to_friend_left[0]**2) + (ball_to_friend_left[1]**2))**(1/2))
+                    friendrightpostmag = (((ball_to_friend_right[0]**2) + (ball_to_friend_right[1]**2))**(1/2))
+                    ballvelmag = (((agent.ball.velocity[0]**2) + (agent.ball.velocity[1]**2))**(1/2))
+
+                    friendleftang = abs(math.acos(ball_to_friend_left[1]/friendleftpostmag))
+                    friendrightang = abs(math.acos(ball_to_friend_right[1]/friendrightpostmag))
+                    ballvelang = abs(math.acos(agent.ball.velocity[1]/ballvelmag))
+
+                    if ballvelang in range(friendleftang,friendrightang):
+                        agent.textpos("BALLTOWARDSGOAL")
+                    else:
+                        agent.textpos("BALLNOTTOWARDSGOAL")
+
 
 
                     #print(ball_to_friend_left)
