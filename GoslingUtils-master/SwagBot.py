@@ -9,7 +9,7 @@ class SwagBot(GoslingAgent):
         agent.debug_stack()
         #An example of pushing routines to the stack:
 
-        if False:#len(agent.stack) < 1:
+        if len(agent.stack) < 1:
             if agent.kickoff_flag:
                 agent.push(kickoff())
             else:
