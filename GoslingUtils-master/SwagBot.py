@@ -49,16 +49,6 @@ class SwagBot(GoslingAgent):
                     me_to_ball = (agent.me.location - agent.ball.location).normalize()
                     ball_behind_me = agent.me.velocity.dot(me_to_ball) #if this is negative, the ball is behind you. 
 
-                    if ball_towards_friend_goal > 0 and ball_to_friend_distance > 2000:
-                        agent.push(hits["anywhere_but_my_net"][0])    
-
-                    elif ball_travels_towards_me < 0 and agent.ball.velocity > 2240: 
-                        agent.push(halfflip)
-                        agent.push(hits["anywhere_but_my_net"][0])
-                
-                    elif ((ball_travels_towards_me < 0) and (agent.ball.velocity <= 2240) and (ball_behind_me > 0)): 
-                        agent.push(hits["goal"][0])
-
                     agent.line(agent.ball.location, agent.friend_goal.left_post)
                     agent.line(agent.ball.location, agent.friend_goal.right_post)
                     agent.line(agent.ball.location, (agent.ball.location + agent.ball.velocity))
@@ -70,6 +60,16 @@ class SwagBot(GoslingAgent):
                     friendleftang = abs(math.acos(ball_to_friend_left[1]/friendleftpostmag))
                     friendrightang = abs(math.acos(ball_to_friend_right[1]/friendrightpostmag))
                     ballvelang = abs(math.acos(agent.ball.velocity[1]/ballvelmag))
+
+                    if ball_towards_friend_goal > 0 and ball_to_friend_distance > 2000:
+                        agent.push(hits["anywhere_but_my_net"][0])    
+
+                    elif ball_travels_towards_me < 0 and agent.ball.velocity.magnitude > 2240: 
+                        agent.push(halfflip)
+                        agent.push(hits["anywhere_but_my_net"][0])
+                
+                    elif ((ball_travels_towards_me < 0) and (agent.ball.velocity.magnitude <= 2240) and (ball_behind_me > 0)): 
+                        agent.push(hits["goal"][0])
 
                     if ballvelang in range(friendleftang,friendrightang):
                         agent.textpos("BALLTOWARDSGOAL")
