@@ -53,28 +53,31 @@ class SwagBot(GoslingAgent):
                     agent.line(agent.ball.location, agent.friend_goal.right_post)
                     agent.line(agent.ball.location, (agent.ball.location + agent.ball.velocity))
 
-                    friendleftpostmag = (((ball_to_friend_left[0]**2) + (ball_to_friend_left[1]**2))**(1/2))
-                    friendrightpostmag = (((ball_to_friend_right[0]**2) + (ball_to_friend_right[1]**2))**(1/2))
-                    ballvelmag = (((agent.ball.velocity[0]**2) + (agent.ball.velocity[1]**2))**(1/2))
+                    if (agent.ball.velocity.magnitude != 0):
+                        friendleftpostmag = (((ball_to_friend_left[0]**2) + (ball_to_friend_left[1]**2))**(1/2))
+                        friendrightpostmag = (((ball_to_friend_right[0]**2) + (ball_to_friend_right[1]**2))**(1/2))
+                        ballvelmag = (((agent.ball.velocity[0]**2) + (agent.ball.velocity[1]**2))**(1/2))
 
-                    friendleftang = abs(math.acos(ball_to_friend_left[1]/friendleftpostmag))
-                    friendrightang = abs(math.acos(ball_to_friend_right[1]/friendrightpostmag))
-                    ballvelang = abs(math.acos(agent.ball.velocity[1]/ballvelmag))
+                        friendleftang = abs(math.acos(ball_to_friend_left[1]/friendleftpostmag))
+                        friendrightang = abs(math.acos(ball_to_friend_right[1]/friendrightpostmag))
+                        ballvelang = abs(math.acos(agent.ball.velocity[1]/ballvelmag))
 
-                    if ball_towards_friend_goal > 0 and ball_to_friend_distance > 2000:
-                        agent.push(hits["anywhere_but_my_net"][0])    
+                        if ((friendleftang < ballvelang) and (ballvelang < friendrightang)):
+                            agent.textpos("BALLTOWARDSGOAL")
+                        else:
+                            agent.textpos("BALLNOTTOWARDSGOAL")
 
-                    elif ball_travels_towards_me < 0 and agent.ball.velocity.magnitude > 2240: 
-                        agent.push(halfflip)
-                        agent.push(hits["anywhere_but_my_net"][0])
+                    #if ball_towards_friend_goal > 0 and ball_to_friend_distance > 2000:
+                    #    agent.push(hits["anywhere_but_my_net"][0])    
+
+                    #elif ball_travels_towards_me < 0 and agent.ball.velocity.magnitude > 2240: 
+                    #    agent.push(halfflip)
+                    #    agent.push(hits["anywhere_but_my_net"][0])
                 
-                    elif ((ball_travels_towards_me < 0) and (agent.ball.velocity.magnitude <= 2240) and (ball_behind_me > 0)): 
-                        agent.push(hits["goal"][0])
+                    #elif ((ball_travels_towards_me < 0) and (agent.ball.velocity.magnitude <= 2240) and (ball_behind_me > 0)): 
+                    #    agent.push(hits["goal"][0])
 
-                    if ballvelang in range(friendleftang,friendrightang):
-                        agent.textpos("BALLTOWARDSGOAL")
-                    else:
-                        agent.textpos("BALLNOTTOWARDSGOAL")
+
 
 
 
