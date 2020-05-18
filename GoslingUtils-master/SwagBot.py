@@ -1,4 +1,5 @@
 from tools import  *
+
 from objects import *
 from routines import *
 
@@ -9,7 +10,7 @@ class SwagBot(GoslingAgent):
         agent.debug_stack()
         #An example of pushing routines to the stack:
 
-        if False:#len(agent.stack) < 1:
+        if True:#len(agent.stack) < 1:
             if agent.kickoff_flag:
                 agent.push(kickoff())
             else:
@@ -36,6 +37,8 @@ class SwagBot(GoslingAgent):
                     targets = {"goal":(agent.foe_goal.left_post,agent.foe_goal.right_post), "anywhere_but_my_net":(agent.friend_goal.right_post,agent.friend_goal.left_post)}
                     hits = find_hits(agent,targets)
                     
+                    agent.line
+
                     #ball_to_friend_left = (agent.ball.location - agent.friend_goal.left_post).normalize()
                     #ball_to_friend_right = (agent.ball.location - agent.friend_goal.right_post).normalize()
                     ball_to_friend = (agent.friend_goal.location - agent.ball.location).normalize()
