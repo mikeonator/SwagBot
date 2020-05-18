@@ -56,7 +56,7 @@ class SwagBot(GoslingAgent):
                         agent.push(halfflip)
                         agent.push(hits["anywhere_but_my_net"][0])
                 
-                     else ball_travels_towards_me < 0 and agent.ball.velocity <= 2240 and ball_behind_me > 0: 
+                    elif ((ball_travels_towards_me < 0) and (agent.ball.velocity <= 2240) and (ball_behind_me > 0)): 
                         agent.push(hits["goal"][0])
 
                     agent.line(agent.ball.location, agent.friend_goal.left_post)
