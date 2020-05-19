@@ -19,6 +19,7 @@ class SwagBot(GoslingAgent):
                 goal_to_me = agent.me.location - agent.friend_goal.location
                 my_distance = my_goal_to_ball.dot(goal_to_me)
                 
+                #Determines whether the bot is on their side of the field or not
                 onmyside = False
                 if agent.team == 0:
                     if agent.me.location.y < 1:
@@ -27,6 +28,7 @@ class SwagBot(GoslingAgent):
                     if agent.me.location.y > 1:
                         onmyside = True
 
+                #determines both whether the bot and the opponent are offside (based on the ball)
                 me_offsideball = my_distance - 200 > ball_distance
                 foe_offsideball = abs(agent.foe_goal.location.y - agent.foes[0].location.y) - 200 > abs(agent.foe_goal.location.y - agent.ball.location.y)
 
@@ -43,9 +45,11 @@ class SwagBot(GoslingAgent):
                 ball_travels_towards_me = agent.me.velocity.dot(agent.ball.velocity) #if negative, ball is going towards you 
                 me_to_ball = (agent.me.location - agent.ball.location).normalize()
                 ball_behind_me = agent.me.velocity.dot(me_to_ball) #if this is negative, the ball is behind you. 
-                ball_towards_friend_goal = bool
+                ball_towards_friend_goal = False
                 
-                if (agent.ball.velocity.magnitude != 0):
+
+                #Determines whether the ball is heading towards the friendly goal
+                if (agent.ball.velocity.magnitude() != 0):
                     
                     leftcross = Vector3.dot(agent.ball.velocity.normalize(), (Vector3.cross(Vector3(0,0,1), ball_to_friend_left)))
                     rightcross = Vector3.dot(agent.ball.velocity.normalize(), (Vector3.cross(Vector3(0,0,1), ball_to_friend_right)))
@@ -55,7 +59,9 @@ class SwagBot(GoslingAgent):
                     else:
                         ball_towards_friend_goal = False
 
-                if ((need_boost and foe_offside) and not close):
+                ##we should fine tune the conditions for needboost
+                if ((need_boost and foe_offsideball) and not close):
+                    #Determines which "fatboost" to go for
                     large_boosts = [boost for boost in agent.boosts if boost.large and boost.active]
                     if (len(large_boosts) > 0):
                         closest_fatboost = large_boosts[0]
@@ -63,7 +69,7 @@ class SwagBot(GoslingAgent):
                                 if (boost.location - agent.me.location).magnitude() < (closest_fatboost.location - agent.me.location).magnitude():
                                     closest_fatboost = boost
                         agent.push(goto_boost(closest_fatboost))
-                else:
+                
 
                                 
 
