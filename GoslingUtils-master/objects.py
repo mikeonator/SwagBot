@@ -62,7 +62,7 @@ class GoslingAgent(BaseAgent):
         self.renderer.draw_line_3d(start,end,self.renderer.create_color(255,*color))
     def textpos(self,text):
         final = text
-        print(final)
+        #print(final)
         self.renderer.draw_string_2d(10,50+(50*(len(final))),3,3,final,self.renderer.white())  
     def debug_stack(self):
         #Draws the stack on the screen
