@@ -20,13 +20,23 @@ class SwagBot(GoslingAgent):
                 my_distance = my_goal_to_ball.dot(goal_to_me)
                 
                 #Determines whether the bot is on their side of the field or not
-                onmyside = False
+                amionmyside = False
                 if agent.team == 0:
                     if agent.me.location.y < 1:
-                        onmyside = True
+                        amionmyside = True
                 else:
                     if agent.me.location.y > 1:
-                        onmyside = True
+                        amionmyside = True
+
+
+                isfoeontheirside = False
+                if agent.team == 0:
+                    if agent.foes[0].location.y > 1:
+                        isfoeontheirside = True
+                else:
+                    if agent.foes[0].location.y < 1:
+                        isfoeontheirside = True
+
 
                 #determines both whether the bot and the opponent are offside (based on the ball)
                 me_offsideball = my_distance - 200 > ball_distance
