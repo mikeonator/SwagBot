@@ -14,7 +14,6 @@ class SwagBot(GoslingAgent):
                 agent.push(kickoff())
             else:
                 close = ((agent.me.location - agent.ball.location).magnitude() < 2000)
-                need_boost = (agent.me.boost < 20)
                 my_goal_to_ball,ball_distance = (agent.ball.location - agent.friend_goal.location).normalize(True)
                 goal_to_me = agent.me.location - agent.friend_goal.location
                 my_distance = my_goal_to_ball.dot(goal_to_me)
@@ -28,7 +27,7 @@ class SwagBot(GoslingAgent):
                     if agent.me.location.y > 1:
                         amionmyside = True
 
-
+                #determines whether the foe is on their side of the field or not
                 isfoeontheirside = False
                 if agent.team == 0:
                     if agent.foes[0].location.y > 1:
@@ -36,6 +35,15 @@ class SwagBot(GoslingAgent):
                 else:
                     if agent.foes[0].location.y < 1:
                         isfoeontheirside = True
+
+                #Determines if ball is onside or not
+                ballonmyside = False
+                if agent.team == 0:
+                    if agent.ball.location.y < 1:
+                        ballonmyside = True
+                else:
+                    if agent.ball.location.y > 1:
+                        ballonmyside = True
 
 
                 #determines both whether the bot and the opponent are offside (based on the ball)
@@ -68,6 +76,28 @@ class SwagBot(GoslingAgent):
                         ball_towards_friend_goal = True
                     else:
                         ball_towards_friend_goal = False
+
+                need_boost = (agent.me.boost < 12)
+                
+                #SHOOT CONDITIONS
+                    #
+                #SAVE CONDITIONS
+                    #
+                #NEEDBOOST CONDITIONS
+                    #BOOSTPAD
+                        #
+                    #FATBOOST
+                        #
+                #RECOVERY CONDITIONS
+                    #
+
+
+
+
+
+
+
+
 
                 ##we should fine tune the conditions for needboost
                 if ((need_boost and foe_offsideball) and not close):
