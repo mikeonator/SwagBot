@@ -114,7 +114,6 @@ class GoslingAgent(BaseAgent):
         self.previous_frame_opponent_score = self.foe_score
         if self.previous_frame_friendly_score < self.my_score:
             self.send_quick_chat(QuickChats.CHAT_EVERYONE, QuickChats.Compliments_WhatASave)
-            print("I Scored!")
         #print(self.previous_frame_friendly_score)
         self.previous_frame_friendly_score = self.my_score
 

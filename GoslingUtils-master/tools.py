@@ -33,7 +33,9 @@ def find_hits(agent,targets,foe=False):
             i += 15 - cap(int(ball_velocity//150),0,13)
             
             car_to_ball = ball_location - agent.me.location
+            boosty = agent.me.boost
             if foe:
+                boosty = agent.foes[0].boost
                 car_to_ball = ball_location - agent.foes[0].location
             #Adding a True to a vector's normalize will have it also return the magnitude of the vector
             direction, distance = car_to_ball.normalize(True)
@@ -48,7 +50,7 @@ def find_hits(agent,targets,foe=False):
             backward_time = time_remaining - (backward_angle * 0.418)
 
             #If the car only had to drive in a straight line, we ensure it has enough time to reach the ball (a few assumptions are made)
-            forward_flag = forward_time > 0.0 and (distance*1.05 / forward_time) < (2290 if agent.me.boost > distance/100 else 1400)
+            forward_flag = forward_time > 0.0 and (distance*1.05 / forward_time) < (2290 if boosty > distance/100 else 1400)
             backward_flag = distance < 1500 and backward_time > 0.0 and (distance*1.05 / backward_time) < 1200
             
             #Provided everything checks out, we begin to look at the target pairs
@@ -71,7 +73,7 @@ def find_hits(agent,targets,foe=False):
                             if forward_flag:
                                 if ball_location[2] <= 300 and slope > 0.0:
                                     hits[pair].append(jump_shot(ball_location,intercept_time,best_shot_vector,slope))
-                                if ball_location[2] > 300 and ball_location[2] < 600 and slope > 1.0 and (ball_location[2]-250) * 0.14 > agent.me.boost:
+                                if ball_location[2] > 300 and ball_location[2] < 600 and slope > 1.0 and (ball_location[2]-250) * 0.14 > boosty:
                                     hits[pair].append(aerial_shot(ball_location,intercept_time,best_shot_vector,slope))
                             elif backward_flag and ball_location[2] <= 280 and slope > 0.25:
                                 hits[pair].append(jump_shot(ball_location,intercept_time,best_shot_vector,slope,-1))
