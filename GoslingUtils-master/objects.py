@@ -1,6 +1,7 @@
 import math
 import rlbot.utils.structures.game_data_struct as game_data_struct
 from rlbot.agents.base_agent import BaseAgent, SimpleControllerState
+from rlbot.utils.structures.quick_chats import QuickChats
 
 #This file holds all of the objects used in gosling utils
 #Includes custom vector and matrix objects
@@ -19,7 +20,10 @@ class GoslingAgent(BaseAgent):
         self.game = game_object()
         #A list of boosts
         self.boosts = []
+        
         #goals
+        self.previous_frame_opponent_score = 0
+        self.previous_frame_friendly_score = 0
         self.friend_goal = goal_object(self.team)
         self.foe_goal = goal_object(not self.team)
         #A list that acts as the routines stack
@@ -63,7 +67,10 @@ class GoslingAgent(BaseAgent):
     def textpos(self,text):
         final = text
         #print(final)
-        self.renderer.draw_string_2d(10,50+(50*(len(final))),3,3,final,self.renderer.white())  
+        self.renderer.draw_string_2d(10,50+(50*(len(final))),3,3,final,self.renderer.white())
+    def toxicity(self,chat):
+        chatdict = {"Information_IGotIt":QuickChats.Information_IGotIt,"Information_NeedBoost":QuickChats.Information_NeedBoost,"Information_TakeTheShot":QuickChats.Information_TakeTheShot,"Information_Defending":QuickChats.Information_Defending,"Information_GoForIt":QuickChats.Information_GoForIt,"Information_Centering":QuickChats.Information_Centering,"Information_AllYours":QuickChats.Information_AllYours,"Information_InPosition":QuickChats.Information_InPosition,"Information_Incoming":QuickChats.Information_Incoming,"Compliments_NiceShot":QuickChats.Compliments_NiceShot,"Compliments_GreatPass":QuickChats.Compliments_GreatPass,"Compliments_Thanks":QuickChats.Compliments_Thanks,"Compliments_WhatASave":QuickChats.Compliments_WhatASave,"Compliments_NiceOne":QuickChats.Compliments_NiceOne,"Compliments_WhatAPlay":QuickChats.Compliments_WhatAPlay,"Compliments_GreatClear":QuickChats.Compliments_GreatClear,"Compliments_NiceBlock":QuickChats.Compliments_NiceBlock,"Reactions_OMG":QuickChats.Reactions_OMG,"Reactions_Noooo":QuickChats.Reactions_Noooo,"Reactions_Wow":QuickChats.Reactions_Wow,"Reactions_CloseOne":QuickChats.Reactions_CloseOne,"Reactions_NoWay":QuickChats.Reactions_NoWay,"Reactions_HolyCow":QuickChats.Reactions_HolyCow,"Reactions_Whew":QuickChats.Reactions_Whew,"Reactions_Siiiick":QuickChats.Reactions_Siiiick,"Reactions_Calculated":QuickChats.Reactions_Calculated,"Reactions_Savage":QuickChats.Reactions_Savage,"Reactions_Okay":QuickChats.Reactions_Okay,"Apologies_Cursing":QuickChats.Apologies_Cursing,"Apologies_NoProblem": QuickChats.Apologies_NoProblem,"Apologies_Whoops":QuickChats.Apologies_Whoops,"Apologies_Sorry":QuickChats.Apologies_Sorry,"Apologies_MyBad":QuickChats.Apologies_MyBad,"Apologies_Oops":QuickChats.Apologies_Oops,"Apologies_MyFault":QuickChats.Apologies_MyFault,"PostGame_Gg":QuickChats.PostGame_Gg,"PostGame_WellPlayed":QuickChats.PostGame_WellPlayed,"PostGame_ThatWasFun":QuickChats.PostGame_ThatWasFun,"PostGame_Rematch":QuickChats.PostGame_Rematch, "PostGame_OneMoreGame":QuickChats.PostGame_OneMoreGame,"PostGame_WhatAGame":QuickChats.PostGame_WhatAGame,"PostGame_NiceMoves":QuickChats.PostGame_NiceMoves,"PostGame_EverybodyDance":QuickChats.PostGame_EverybodyDance}
+        self.send_quick_chat(QuickChats.CHAT_EVERYONE, chatdict[chat])
     def debug_stack(self):
         #Draws the stack on the screen
         white = self.renderer.white()
@@ -97,6 +104,20 @@ class GoslingAgent(BaseAgent):
         self.preprocess(packet)
         
         self.renderer.begin_rendering()
+
+        self.my_score = packet.teams[self.team].score
+        self.foe_score = packet.teams[not self.team].score
+
+        #check for score changes and quickchat accordingly
+        if self.previous_frame_opponent_score < self.foe_score:
+            self.send_quick_chat(QuickChats.CHAT_EVERYONE, QuickChats.Reactions_Siiiick)
+        self.previous_frame_opponent_score = self.foe_score
+        if self.previous_frame_friendly_score < self.my_score:
+            self.send_quick_chat(QuickChats.CHAT_EVERYONE, QuickChats.Compliments_WhatASave)
+            print("I Scored!")
+        #print(self.previous_frame_friendly_score)
+        self.previous_frame_friendly_score = self.my_score
+
         #Run our strategy code
         self.run()
         #run the routine on the end of the stack

@@ -2,7 +2,7 @@ from routines import *
 
 #This file is for strategic tools
 
-def find_hits(agent,targets):
+def find_hits(agent,targets,foe=False):
     #find_hits takes a dict of (left,right) target pairs and finds routines that could hit the ball between those target pairs
     #find_hits is only meant for routines that require a defined intercept time/place in the future
     #find_hits should not be called more than once in a given tick, as it has the potential to use an entire tick to calculate
@@ -33,6 +33,8 @@ def find_hits(agent,targets):
             i += 15 - cap(int(ball_velocity//150),0,13)
             
             car_to_ball = ball_location - agent.me.location
+            if foe:
+                car_to_ball = ball_location - agent.foes[0].location
             #Adding a True to a vector's normalize will have it also return the magnitude of the vector
             direction, distance = car_to_ball.normalize(True)
 

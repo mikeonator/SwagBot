@@ -150,7 +150,7 @@ class halfflip():
         elif elapsed < 0.3 or (not self.cancel and elapsed < 0.9):
             agent.controller.jump = True
             agent.controller.pitch = self.pitch
-        elif elapsed < 0.45:
+        else:
             agent.pop()
             agent.push(recovery()) 
             
